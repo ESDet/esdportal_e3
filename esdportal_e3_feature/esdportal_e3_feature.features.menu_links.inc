@@ -10,24 +10,6 @@
 function esdportal_e3_feature_menu_default_menu_links() {
   $menu_links = array();
 
-  // Exported menu link: menu-coach-menu:e3-contact/add/teacher
-  $menu_links['menu-coach-menu:e3-contact/add/teacher'] = array(
-    'menu_name' => 'menu-coach-menu',
-    'link_path' => 'e3-contact/add/teacher',
-    'router_path' => 'e3-contact/add/teacher',
-    'link_title' => 'Add Teacher',
-    'options' => array(
-      'attributes' => array(
-        'title' => '',
-      ),
-    ),
-    'module' => 'menu',
-    'hidden' => 1,
-    'external' => 0,
-    'has_children' => 0,
-    'expanded' => 0,
-    'weight' => -46,
-  );
   // Exported menu link: menu-coach-menu:e3-note/add/class_assessment
   $menu_links['menu-coach-menu:e3-note/add/class_assessment'] = array(
     'menu_name' => 'menu-coach-menu',
@@ -50,7 +32,7 @@ function esdportal_e3_feature_menu_default_menu_links() {
   $menu_links['menu-coach-menu:e3-note/add/observation_log'] = array(
     'menu_name' => 'menu-coach-menu',
     'link_path' => 'e3-note/add/observation_log',
-    'router_path' => 'e3-note/add/observation_log',
+    'router_path' => 'e3-note/add',
     'link_title' => 'Add Observation Log',
     'options' => array(
       'attributes' => array(
@@ -68,7 +50,7 @@ function esdportal_e3_feature_menu_default_menu_links() {
   $menu_links['menu-coach-menu:e3-note/add/session_log'] = array(
     'menu_name' => 'menu-coach-menu',
     'link_path' => 'e3-note/add/session_log',
-    'router_path' => 'e3-note/add/session_log',
+    'router_path' => 'e3-note/add',
     'link_title' => 'Add Session Log',
     'options' => array(
       'attributes' => array(
@@ -105,7 +87,6 @@ function esdportal_e3_feature_menu_default_menu_links() {
   t('Add CLASS Assessment');
   t('Add Observation Log');
   t('Add Session Log');
-  t('Add Teacher');
   t('My Teachers');
 
 

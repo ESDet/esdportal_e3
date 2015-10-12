@@ -246,7 +246,12 @@ function esdportal_e3_feature_views_default_views() {
   $handler = $view->new_display('default', 'Master', 'default');
   $handler->display->display_options['title'] = 'E3 Teacher Management';
   $handler->display->display_options['use_more_always'] = FALSE;
-  $handler->display->display_options['access']['type'] = 'none';
+  $handler->display->display_options['access']['type'] = 'role';
+  $handler->display->display_options['access']['role'] = array(
+    4 => '4',
+    20 => '20',
+    6 => '6',
+  );
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
@@ -254,8 +259,9 @@ function esdportal_e3_feature_views_default_views() {
   $handler->display->display_options['pager']['options']['items_per_page'] = '20';
   $handler->display->display_options['style_plugin'] = 'table';
   $handler->display->display_options['style_options']['columns'] = array(
+    'views_bulk_operations' => 'views_bulk_operations',
     'id' => 'id',
-    'uid' => 'uid',
+    'type' => 'type',
     'field_contact_addy_first_name' => 'field_contact_addy_first_name',
     'field_contact_addy_last_name' => 'field_contact_addy_last_name',
     'fullname' => 'fullname',
@@ -265,6 +271,11 @@ function esdportal_e3_feature_views_default_views() {
   );
   $handler->display->display_options['style_options']['default'] = '-1';
   $handler->display->display_options['style_options']['info'] = array(
+    'views_bulk_operations' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
     'id' => array(
       'sortable' => 0,
       'default_sort_order' => 'asc',
@@ -272,7 +283,7 @@ function esdportal_e3_feature_views_default_views() {
       'separator' => '',
       'empty_column' => 0,
     ),
-    'uid' => array(
+    'type' => array(
       'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
@@ -301,14 +312,14 @@ function esdportal_e3_feature_views_default_views() {
       'empty_column' => 0,
     ),
     'field_ec' => array(
-      'sortable' => 0,
+      'sortable' => 1,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
     'field_fname' => array(
-      'sortable' => 0,
+      'sortable' => 1,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => ' ',
@@ -399,12 +410,12 @@ function esdportal_e3_feature_views_default_views() {
   $handler->display->display_options['fields']['type']['id'] = 'type';
   $handler->display->display_options['fields']['type']['table'] = 'e3_contact';
   $handler->display->display_options['fields']['type']['field'] = 'type';
-  /* Field: E3 Contact: Home address - First name */
+  /* Field: Broken/missing handler */
   $handler->display->display_options['fields']['field_contact_addy_first_name']['id'] = 'field_contact_addy_first_name';
   $handler->display->display_options['fields']['field_contact_addy_first_name']['table'] = 'field_data_field_contact_addy';
   $handler->display->display_options['fields']['field_contact_addy_first_name']['field'] = 'field_contact_addy_first_name';
   $handler->display->display_options['fields']['field_contact_addy_first_name']['label'] = 'First name';
-  /* Field: E3 Contact: Home address - Last name */
+  /* Field: Broken/missing handler */
   $handler->display->display_options['fields']['field_contact_addy_last_name']['id'] = 'field_contact_addy_last_name';
   $handler->display->display_options['fields']['field_contact_addy_last_name']['table'] = 'field_data_field_contact_addy';
   $handler->display->display_options['fields']['field_contact_addy_last_name']['field'] = 'field_contact_addy_last_name';
@@ -415,7 +426,7 @@ function esdportal_e3_feature_views_default_views() {
   $handler->display->display_options['fields']['fullname']['field'] = 'fullname';
   $handler->display->display_options['fields']['fullname']['label'] = 'Name';
   $handler->display->display_options['fields']['fullname']['alter']['path'] = '/e3-contact/[id]/edit';
-  /* Field: Field: related Early Childchood Center record */
+  /* Field: Content: related Early Childchood Center record */
   $handler->display->display_options['fields']['field_ec']['id'] = 'field_ec';
   $handler->display->display_options['fields']['field_ec']['table'] = 'field_data_field_ec';
   $handler->display->display_options['fields']['field_ec']['field'] = 'field_ec';
@@ -431,6 +442,49 @@ function esdportal_e3_feature_views_default_views() {
   $handler->display->display_options['fields']['field_lname']['table'] = 'field_data_field_lname';
   $handler->display->display_options['fields']['field_lname']['field'] = 'field_lname';
   $handler->display->display_options['fields']['field_lname']['relationship'] = 'uid';
+  /* Filter criterion: E3 Contact: Label */
+  $handler->display->display_options['filters']['fullname']['id'] = 'fullname';
+  $handler->display->display_options['filters']['fullname']['table'] = 'e3_contact';
+  $handler->display->display_options['filters']['fullname']['field'] = 'fullname';
+  $handler->display->display_options['filters']['fullname']['operator'] = 'contains';
+  $handler->display->display_options['filters']['fullname']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['fullname']['expose']['operator_id'] = 'fullname_op';
+  $handler->display->display_options['filters']['fullname']['expose']['label'] = 'Name';
+  $handler->display->display_options['filters']['fullname']['expose']['operator'] = 'fullname_op';
+  $handler->display->display_options['filters']['fullname']['expose']['identifier'] = 'fullname';
+  $handler->display->display_options['filters']['fullname']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    4 => 0,
+    17 => 0,
+    7 => 0,
+    18 => 0,
+    6 => 0,
+    19 => 0,
+    20 => 0,
+  );
+  /* Filter criterion: User: Name */
+  $handler->display->display_options['filters']['uid']['id'] = 'uid';
+  $handler->display->display_options['filters']['uid']['table'] = 'users';
+  $handler->display->display_options['filters']['uid']['field'] = 'uid';
+  $handler->display->display_options['filters']['uid']['relationship'] = 'uid';
+  $handler->display->display_options['filters']['uid']['value'] = '';
+  $handler->display->display_options['filters']['uid']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['uid']['expose']['operator_id'] = 'uid_op';
+  $handler->display->display_options['filters']['uid']['expose']['label'] = 'Coach';
+  $handler->display->display_options['filters']['uid']['expose']['operator'] = 'uid_op';
+  $handler->display->display_options['filters']['uid']['expose']['identifier'] = 'uid';
+  $handler->display->display_options['filters']['uid']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    4 => 0,
+    17 => 0,
+    7 => 0,
+    18 => 0,
+    6 => 0,
+    19 => 0,
+    20 => 0,
+  );
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
@@ -609,17 +663,19 @@ function esdportal_e3_feature_views_default_views() {
   $handler->display->display_options['fields']['fullname']['label'] = 'Name';
   $handler->display->display_options['fields']['fullname']['alter']['make_link'] = TRUE;
   $handler->display->display_options['fields']['fullname']['alter']['path'] = 'teacher-report/[id]';
-  /* Field: E3 Contact: Home address - First name */
+  /* Field: Broken/missing handler */
   $handler->display->display_options['fields']['field_contact_addy_first_name']['id'] = 'field_contact_addy_first_name';
   $handler->display->display_options['fields']['field_contact_addy_first_name']['table'] = 'field_data_field_contact_addy';
   $handler->display->display_options['fields']['field_contact_addy_first_name']['field'] = 'field_contact_addy_first_name';
   $handler->display->display_options['fields']['field_contact_addy_first_name']['label'] = 'First name';
-  /* Field: E3 Contact: Home address - Last name */
+  $handler->display->display_options['fields']['field_contact_addy_first_name']['exclude'] = TRUE;
+  /* Field: Broken/missing handler */
   $handler->display->display_options['fields']['field_contact_addy_last_name']['id'] = 'field_contact_addy_last_name';
   $handler->display->display_options['fields']['field_contact_addy_last_name']['table'] = 'field_data_field_contact_addy';
   $handler->display->display_options['fields']['field_contact_addy_last_name']['field'] = 'field_contact_addy_last_name';
   $handler->display->display_options['fields']['field_contact_addy_last_name']['label'] = 'Last name';
-  /* Field: Field: related Early Childchood Center record */
+  $handler->display->display_options['fields']['field_contact_addy_last_name']['exclude'] = TRUE;
+  /* Field: Content: related Early Childchood Center record */
   $handler->display->display_options['fields']['field_ec']['id'] = 'field_ec';
   $handler->display->display_options['fields']['field_ec']['table'] = 'field_data_field_ec';
   $handler->display->display_options['fields']['field_ec']['field'] = 'field_ec';
@@ -680,19 +736,12 @@ function esdportal_e3_feature_views_default_views() {
   $handler->display->display_options['fields']['id']['field'] = 'id';
   $handler->display->display_options['fields']['id']['label'] = 'E3 ID';
   $handler->display->display_options['fields']['id']['separator'] = '';
-  /* Field: E3 Contact: Home address */
+  /* Field: Broken/missing handler */
   $handler->display->display_options['fields']['field_contact_addy']['id'] = 'field_contact_addy';
   $handler->display->display_options['fields']['field_contact_addy']['table'] = 'field_data_field_contact_addy';
   $handler->display->display_options['fields']['field_contact_addy']['field'] = 'field_contact_addy';
   $handler->display->display_options['fields']['field_contact_addy']['label'] = '';
   $handler->display->display_options['fields']['field_contact_addy']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_contact_addy']['click_sort_column'] = 'country';
-  $handler->display->display_options['fields']['field_contact_addy']['settings'] = array(
-    'use_widget_handlers' => 1,
-    'format_handlers' => array(
-      'address' => 'address',
-    ),
-  );
   /* Field: Field: Email */
   $handler->display->display_options['fields']['field_email']['id'] = 'field_email';
   $handler->display->display_options['fields']['field_email']['table'] = 'field_data_field_email';
@@ -718,24 +767,24 @@ function esdportal_e3_feature_views_default_views() {
   $handler->display->display_options['fields']['id']['field'] = 'id';
   $handler->display->display_options['fields']['id']['exclude'] = TRUE;
   $handler->display->display_options['fields']['id']['separator'] = '';
-  /* Field: Field: related Early Childchood Center record */
+  /* Field: Content: related Early Childchood Center record */
   $handler->display->display_options['fields']['field_ec']['id'] = 'field_ec';
   $handler->display->display_options['fields']['field_ec']['table'] = 'field_data_field_ec';
   $handler->display->display_options['fields']['field_ec']['field'] = 'field_ec';
   $handler->display->display_options['fields']['field_ec']['label'] = 'Works at';
   $handler->display->display_options['fields']['field_ec']['element_label_type'] = 'h4';
-  /* Field: E3 Contact: Position / role */
+  /* Field: Broken/missing handler */
   $handler->display->display_options['fields']['field_teacher_ec_role']['id'] = 'field_teacher_ec_role';
   $handler->display->display_options['fields']['field_teacher_ec_role']['table'] = 'field_data_field_teacher_ec_role';
   $handler->display->display_options['fields']['field_teacher_ec_role']['field'] = 'field_teacher_ec_role';
   $handler->display->display_options['fields']['field_teacher_ec_role']['label'] = '';
   $handler->display->display_options['fields']['field_teacher_ec_role']['element_label_colon'] = FALSE;
-  /* Field: E3 Contact: Work email */
+  /* Field: Broken/missing handler */
   $handler->display->display_options['fields']['field_work_email']['id'] = 'field_work_email';
   $handler->display->display_options['fields']['field_work_email']['table'] = 'field_data_field_work_email';
   $handler->display->display_options['fields']['field_work_email']['field'] = 'field_work_email';
   $handler->display->display_options['fields']['field_work_email']['element_type'] = 'span';
-  /* Field: E3 Contact: Work phone */
+  /* Field: Broken/missing handler */
   $handler->display->display_options['fields']['field_work_phone']['id'] = 'field_work_phone';
   $handler->display->display_options['fields']['field_work_phone']['table'] = 'field_data_field_work_phone';
   $handler->display->display_options['fields']['field_work_phone']['field'] = 'field_work_phone';
@@ -943,8 +992,8 @@ function esdportal_e3_feature_views_default_views() {
   $handler->display->display_options['fields']['field_step_complete_2']['relationship'] = 'reverse_field_ec_teacher_e3_note';
   $handler->display->display_options['fields']['field_step_complete_2']['type'] = 'editable';
   $handler->display->display_options['fields']['field_step_complete_2']['settings'] = array(
-    'click_to_edit' => 0,
-    'click_to_edit_style' => 'button',
+    'click_to_edit' => 1,
+    'click_to_edit_style' => 'hover',
     'empty_text' => '',
     'fallback_format' => 'list_default',
   );
@@ -1081,7 +1130,7 @@ function esdportal_e3_feature_views_default_views() {
     'field_pc_score' => '#134370',
     'field_nc_score' => '#134370',
     'field_ts_score' => '#134370',
-    'field_rsp_score' => '#29b573',
+    'field_rsp_score' => '#134370',
     'field_bm_score' => '#29b573',
     'field_p_score' => '#29b573',
     'field_ilf_score' => '#29b573',
@@ -1220,8 +1269,8 @@ function esdportal_e3_feature_views_default_views() {
     t('Email'),
     t('Work Info'),
     t('Works at'),
-    t('Work email'),
-    t('Work phone'),
+    t('Broken handler field_data_field_work_email.field_work_email'),
+    t('Broken handler field_data_field_work_phone.field_work_phone'),
     t('Target Practice'),
     t('Planning and Strategy'),
     t('<h2>What\'s next?</h2>'),
