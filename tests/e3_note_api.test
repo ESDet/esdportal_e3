@@ -1,13 +1,61 @@
 <?php
-class SimpletestUnitTestNoteApi extends DrupalUnitTestCase {
+class E3NoteTestCase extends DrupalUnitTestCase {
 	
 	public static function getInfo() {
 	  // Note: getInfo() strings should not be translated.
 	  return array(
-	    'name' => 'Simpletest Example unit tests',
-	    'description' => 'Test that simpletest_example_empty_mysql_date works properly.',
-	    'group' => 'Examples',
+	    'name' => 'E3 Note unit tests',
+	    'description' => 'Test functions found in the e3_note_api section in the esdportal_e3 module',
+	    'group' => 'e3_note',
 	  );
+	}
+
+	function testE3NoteTypeForm() {
+
+		$result = e3_note_type_form($form, &$form_state, $e3_note_type, $op = 'edit');
+		$message = 'Some parameters should return TRUE or FALSE or should EQUAL()';
+		$this->assertTrue($result, $message);
+
+	}
+
+	function testE3NoteTypeFormDeleteConfirm() {
+
+	}
+
+	function testE3NoteAdminAddPage() {
+
+	}
+
+	function testE3NoteAdd() {
+
+	}
+
+	function testE3NoteForm() {
+
+	}
+
+	function testE3NoteDeleteForm() {
+
+	}
+
+	function testCreate() {
+
+	}
+
+	function testBuildContent() {
+
+	}
+
+	function testHookMenu() {
+
+	}
+
+	function testIsLocked() {
+
+	}
+
+	function testE3NoteView() {
+		
 	}
 
 }
