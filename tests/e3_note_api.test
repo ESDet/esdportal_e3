@@ -10,51 +10,35 @@ class E3NoteTestCase extends DrupalUnitTestCase {
 	  );
 	}
 
-	function testE3NoteTypeForm() {
+	function testE3NoteAccess() {
 
-		$result = e3_note_type_form($form, &$form_state, $e3_note_type, $op = 'edit');
+		$result = e3_note_access('create', $e3_note, $account = NULL, $entity_type = NULL);
+		$message = 'Some parameters should return TRUE or FALSE or should EQUAL()';
+		$this->assertTrue($result, $message);
+
+		$result = e3_note_access('view', $e3_note, $account = NULL, $entity_type = NULL);
+		$message = 'Some parameters should return TRUE or FALSE or should EQUAL()';
+		$this->assertTrue($result, $message);
+
+		$result = e3_note_access('edit', $e3_note, $account = NULL, $entity_type = NULL);
 		$message = 'Some parameters should return TRUE or FALSE or should EQUAL()';
 		$this->assertTrue($result, $message);
 
 	}
 
-	function testE3NoteTypeFormDeleteConfirm() {
+	function testE3NoteLoad() {
+
+		$result = e3_note_load($id, $reset = FALSE);
+		$message = 'Some parameters should return TRUE or FALSE or should EQUAL()';
+		$this->assertTrue($result, $message);
 
 	}
 
-	function testE3NoteAdminAddPage() {
+	function testE3NoteLoadMultiple() {
 
-	}
-
-	function testE3NoteAdd() {
-
-	}
-
-	function testE3NoteForm() {
-
-	}
-
-	function testE3NoteDeleteForm() {
-
-	}
-
-	function testCreate() {
-
-	}
-
-	function testBuildContent() {
-
-	}
-
-	function testHookMenu() {
-
-	}
-
-	function testIsLocked() {
-
-	}
-
-	function testE3NoteView() {
+		$result = e3_note_load_multiple($ids = array(), $conditions = array(), $reset = FALSE);
+		$message = 'Some parameters should return TRUE or FALSE or should EQUAL()';
+		$this->assertTrue($result, $message);
 		
 	}
 

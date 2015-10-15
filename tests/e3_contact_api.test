@@ -5,57 +5,41 @@ class E3ContactTestCase extends DrupalUnitTestCase {
 	  // Note: getInfo() strings should not be translated.
 	  return array(
 	    'name' => 'E3 Contact unit tests',
-	    'description' => 'Test functions found in the e3_contact_api section in the esdportal_e3 module',
+	    'description' => 'Test functions found in the e3_contact_api section in the esdportal_e3.module',
 	    'group' => 'e3_contact',
 	  );
 	}
 
-	function testE3ContactTypeForm() {
+	function testE3ContactAccess() {
 
-		$result = e3_contact_type_form($form, &$form_state, $e3_contact_type, $op = 'edit');
+		$result = e3_contact_access('create', $e3_contact, $account = NULL, $entity_type = NULL);
+		$message = 'Some parameters should return TRUE or FALSE or should EQUAL()';
+		$this->assertTrue($result, $message);
+
+		$result = e3_contact_access('view', $e3_contact, $account = NULL, $entity_type = NULL);
+		$message = 'Some parameters should return TRUE or FALSE or should EQUAL()';
+		$this->assertTrue($result, $message);
+
+		$result = e3_contact_access('edit', $e3_contact, $account = NULL, $entity_type = NULL);
 		$message = 'Some parameters should return TRUE or FALSE or should EQUAL()';
 		$this->assertTrue($result, $message);
 
 	}
 
-	function testE3ContactTypeFormDeleteConfirm() {
+	function testE3ContactLoad() {
+
+		$result = e3_contact_load($id, $reset = FALSE);
+		$message = 'Some parameters should return TRUE or FALSE or should EQUAL()';
+		$this->assertTrue($result, $message);
 
 	}
 
-	function testE3ContactAdminAddPage() {
+	function testE3ContactLoadMultiple() {
 
-	}
-
-	function testE3ContactAdd() {
-
-	}
-
-	function testE3ContactForm() {
-
-	}
-
-	function testE3ContactDeleteForm() {
-
-	}
-
-	function testCreate() {
-
-	}
-
-	function testBuildContent() {
-
-	}
-
-	function testHookMenu() {
-
-	}
-
-	function testIsLocked() {
-
-	}
-
-	function testE3ContactView() {
-
+		$result = e3_contact_load_multiple($ids = array(), $conditions = array(), $reset = FALSE);
+		$message = 'Some parameters should return TRUE or FALSE or should EQUAL()';
+		$this->assertTrue($result, $message);
+		
 	}
 
 }
