@@ -9,6 +9,4 @@ dependencies[] = views
 
 files[] = esdportal_e3.e3_contact.controller.inc
 files[] = esdportal_e3.e3_note.controller.inc
-
-files[] = e3_contact_api.test
-files[] = e3_note_api.test
+files[] = tests/*.test
