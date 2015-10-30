@@ -1,0 +1,29 @@
+<?php
+class E3ContactTestCase extends DrupalUnitTestCase {
+	
+	public static function getInfo() {
+	  // Note: getInfo() strings should not be translated.
+	  return array(
+	    'name' => 'E3 Contact unit tests',
+	    'description' => 'Test functions found in the e3_contact_api section in the esdportal_e3.module',
+	    'group' => 'e3_contact',
+	  );
+	}
+
+	function testEsdportalE3EntityAverage() {
+		
+		$fields = [
+		  'field_one' => 10,
+		  'field_two' => 5,
+		  'field_three' => null,
+		  'field_four' => null
+		];
+
+		$result = esdportal_e3_entity_average($fields);
+		$message = '$indivual_fields average should equal 7.50';
+		$this->assertEqual($result, 7.50, $message, $group = 'Other');
+
+	}
+
+}
+?>
