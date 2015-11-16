@@ -858,6 +858,30 @@ function esdportal_e3_form_alter(&$form, &$form_state, $form_id) {
 }
 
 /**
+ * Computes averages for a list of fields
+ * 
+ * @param array $fieldNames
+ * @return average $fields_average
+ */
+function esdportal_e3_entity_average($fieldNames) {
+    $fields_values = array(); //create empty array to store values
+
+    foreach ($fieldNames as $value) {
+      if (NULL !== $value) {
+        array_push($fields_values, $value); //fill with value of each non-null field
+      }
+    }
+
+    $fields_average = round((array_sum($fields_values) / count($fields_values)) , 2);
+    
+    if ($fields_average > 0) {
+      return $fields_average;
+    } else {
+      return false;
+    }
+}
+
+/**
  * Implements hook_entity_presave().
  *
  * Calculate average(mean, 2 d.p.) field values, and associated scores.
