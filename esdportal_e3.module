@@ -864,15 +864,13 @@ function esdportal_e3_form_alter(&$form, &$form_state, $form_id) {
  * @return average $fields_average
  */
 function esdportal_e3_entity_average($fieldNames) {
-    $fields_values = array(); //create empty array to store values
-
-    foreach ($fieldNames as $value) {
-      if (NULL !== $value) {
-        array_push($fields_values, $value); //fill with value of each non-null field
-      }
+  $fields_values = array(); //create empty array to store values
+  foreach ($fieldNames as $value) {
+    if (NULL !== $value) {
+      array_push($fields_values, $value); //fill with value of each non-null field
     }
-
-    $fields_average = round((array_sum($fields_values) / count($fields_values)) , 2);
+  }
+  $fields_average = round((array_sum($fields_values) / count($fields_values)) , 2);
     if ($fields_average > 0) {
       return $fields_average;
     } else {
@@ -885,28 +883,19 @@ function esdportal_e3_entity_average($fieldNames) {
  *
  * @param fieldAcronym, the field acronym.
  * @param the wrapper object.
- * a return an array of grouped field values, i.e. 1 value for each cycle.
-
-
+ * @return an array of dield values, i.e. 1 value for each cycle, max 4 cycles.
  */
-
-
-
 function esdportal_e3_entity_field_picker($fieldAcronym, $wrapper) {
-
-  $wrapperQueryString = field_.$fieldAcronym._cycle_;
   $wrapperQueryArray = array();
   for ($i = 1; $i <= 4; $i++) {
-    array_push($wrapperQueryArray, $wrapperQueryString.$i); 
+    array_push($wrapperQueryArray, field_.$fieldAcronym._cycle_.$i); 
   }
-  //return($wrapperQueryArray);
   $wrapperQueryArrayValues = array();
   foreach ($wrapperQueryArray as $fieldName) {
     array_push($wrapperQueryArrayValues, $wrapper->$fieldName->value());
     }
   return($wrapperQueryArrayValues);
 }
-
 
 /**
  * Implements hook_entity_presave().
@@ -916,211 +905,67 @@ function esdportal_e3_entity_field_picker($fieldAcronym, $wrapper) {
 function esdportal_e3_entity_presave($entity) {
   if ($entity->type == 'class_assessment') {
     $wrapper = entity_metadata_wrapper('e3_note', $entity);
-    //Positive Climate average
-    
-    /**
-    $pcFieldNames = array(
-      $wrapper->field_pc_cycle_1->value(),
-      $wrapper->field_pc_cycle_2->value(),
-      $wrapper->field_pc_cycle_3->value(),
-      $wrapper->field_pc_cycle_4->value(),
-    );
-    **/
 
-    $positiveClimate = pc;
-    $pcFieldNames = (esdportal_e3_entity_field_picker($positiveClimate, $wrapper));
-    $wrapper->field_pc_average->set(esdportal_e3_entity_average($pcFieldNames));
-  
-
-   
-
-/**
-    // Positive Climate average.
-    $pc_values = array();
-    if (NULL !== $wrapper->field_pc_cycle_1->value()) {
-      $pc_values[] = $wrapper->field_pc_cycle_1->value();
-    }
-    if (NULL !== $wrapper->field_pc_cycle_2->value()) {
-      $pc_values[] = $wrapper->field_pc_cycle_2->value();
-    }
-    if (NULL !== $wrapper->field_pc_cycle_3->value()) {
-      $pc_values[] = $wrapper->field_pc_cycle_3->value();
-    }
-    if (NULL !== $wrapper->field_pc_cycle_4->value()) {
-      $pc_values[] = $wrapper->field_pc_cycle_4->value();
-    }
-    $pc_average = round((array_sum($pc_values) / count($pc_values)), 2);
-    if ($pc_average > 0) {
-      $wrapper->field_pc_average->set($pc_average);
-    }
-**/
-
-
-
-//  $ncFieldNames = 
+    //Positive Climate Average.
+    $pc = pc;
+    $pcFieldNames = (esdportal_e3_entity_field_picker($pc, $wrapper));
+    $pc_average = esdportal_e3_entity_average($pcFieldNames);
+    $wrapper->field_pc_average->set($pc_average);
 
     // Negative Climate average.
-    $nc_values = array();
-    if (NULL !== $wrapper->field_nc_cycle_1->value()) {
-      $nc_values[] = $wrapper->field_nc_cycle_1->value();
-    }
-    if (NULL !== $wrapper->field_nc_cycle_2->value()) {
-      $nc_values[] = $wrapper->field_nc_cycle_2->value();
-    }
-    if (NULL !== $wrapper->field_nc_cycle_3->value()) {
-      $nc_values[] = $wrapper->field_nc_cycle_3->value();
-    }
-    if (NULL !== $wrapper->field_nc_cycle_4->value()) {
-      $nc_values[] = $wrapper->field_nc_cycle_4->value();
-    }
-    $nc_average = round((array_sum($nc_values) / count($nc_values)), 2);
-    if ($nc_average > 0) {
-      $wrapper->field_nc_average->set($nc_average);
-    }
+    $nc = nc;
+    $ncFieldNames = (esdportal_e3_entity_field_picker($nc, $wrapper));
+    $nc_average = esdportal_e3_entity_average($ncFieldNames);
+    $wrapper->field_nc_average->set($nc_average);
+    
     // Teacher Sensitivity average.
-    $ts_values = array();
-    if (NULL !== $wrapper->field_ts_cycle_1->value()) {
-      $ts_values[] = $wrapper->field_ts_cycle_1->value();
-    }
-    if (NULL !== $wrapper->field_ts_cycle_2->value()) {
-      $ts_values[] = $wrapper->field_ts_cycle_2->value();
-    }
-    if (NULL !== $wrapper->field_ts_cycle_3->value()) {
-      $ts_values[] = $wrapper->field_ts_cycle_3->value();
-    }
-    if (NULL !== $wrapper->field_ts_cycle_4->value()) {
-      $ts_values[] = $wrapper->field_ts_cycle_4->value();
-    }
-    $ts_average = round((array_sum($ts_values) / count($ts_values)), 2);
-    if ($ts_average > 0) {
-      $wrapper->field_ts_average->set($ts_average);
-    }
+    $ts = ts;
+    $tsFieldNames = (esdportal_e3_entity_field_picker($ts, $wrapper));
+    $ts_average = esdportal_e3_entity_average($tsFieldNames);
+    $wrapper->field_ts_average->set($ts_average);
+    
     // Regard for Student Perspective average.
-    $rsp_values = array();
-    if (NULL !== $wrapper->field_rsp_cycle_1->value()) {
-      $rsp_values[] = $wrapper->field_rsp_cycle_1->value();
-    }
-    if (NULL !== $wrapper->field_rsp_cycle_2->value()) {
-      $rsp_values[] = $wrapper->field_rsp_cycle_2->value();
-    }
-    if (NULL !== $wrapper->field_rsp_cycle_3->value()) {
-      $rsp_values[] = $wrapper->field_rsp_cycle_3->value();
-    }
-    if (NULL !== $wrapper->field_rsp_cycle_4->value()) {
-      $rsp_values[] = $wrapper->field_rsp_cycle_4->value();
-    }
-    $rsp_average = round((array_sum($rsp_values) / count($rsp_values)), 2);
-    if ($rsp_average > 0) {
-      $wrapper->field_rsp_average->set($rsp_average);
-    }
+    $rsp = rsp;
+    $rspFieldNames = (esdportal_e3_entity_field_picker($rsp, $wrapper));
+    $rsp_average = esdportal_e3_entity_average($rspFieldNames);
+    $wrapper->field_rsp_average->set($rsp_average);
+
     // Behaviour Management average.
-    $bm_values = array();
-    if (NULL !== $wrapper->field_bm_cycle_1->value()) {
-      $bm_values[] = $wrapper->field_bm_cycle_1->value();
-    }
-    if (NULL !== $wrapper->field_bm_cycle_2->value()) {
-      $bm_values[] = $wrapper->field_bm_cycle_2->value();
-    }
-    if (NULL !== $wrapper->field_bm_cycle_3->value()) {
-      $bm_values[] = $wrapper->field_bm_cycle_3->value();
-    }
-    if (NULL !== $wrapper->field_bm_cycle_4->value()) {
-      $bm_values[] = $wrapper->field_bm_cycle_4->value();
-    }
-    $bm_average = round((array_sum($bm_values) / count($bm_values)), 2);
-    if ($bm_average > 0) {
-      $wrapper->field_bm_average->set($bm_average);
-    }
+    $bm = bm;
+    $bmFieldNames = (esdportal_e3_entity_field_picker($bm, $wrapper));
+    $bm_average = esdportal_e3_entity_average($bmFieldNames);
+    $wrapper->field_bm_average->set($bm_average);
+
     // Productivity average.
-    $p_values = array();
-    if (NULL !== $wrapper->field_p_cycle_1->value()) {
-      $p_values[] = $wrapper->field_p_cycle_1->value();
-    }
-    if (NULL !== $wrapper->field_p_cycle_2->value()) {
-      $p_values[] = $wrapper->field_p_cycle_2->value();
-    }
-    if (NULL !== $wrapper->field_p_cycle_3->value()) {
-      $p_values[] = $wrapper->field_p_cycle_3->value();
-    }
-    if (NULL !== $wrapper->field_p_cycle_4->value()) {
-      $p_values[] = $wrapper->field_p_cycle_4->value();
-    }
-    $p_average = round((array_sum($p_values) / count($p_values)), 2);
-    if ($p_average > 0) {
-      $wrapper->field_p_average->set($p_average);
-    }
+    $p = p;
+    $pFieldNames = (esdportal_e3_entity_field_picker($p, $wrapper));
+    $p_average = esdportal_e3_entity_average($pFieldNames);
+    $wrapper->field_p_average->set($p_average);
+
     // Instructional Learning Formats average.
-    $ilf_values = array();
-    if (NULL !== $wrapper->field_ilf_cycle_1->value()) {
-      $ilf_values[] = $wrapper->field_ilf_cycle_1->value();
-    }
-    if (NULL !== $wrapper->field_ilf_cycle_2->value()) {
-      $ilf_values[] = $wrapper->field_ilf_cycle_2->value();
-    }
-    if (NULL !== $wrapper->field_ilf_cycle_3->value()) {
-      $ilf_values[] = $wrapper->field_ilf_cycle_3->value();
-    }
-    if (NULL !== $wrapper->field_ilf_cycle_4->value()) {
-      $ilf_values[] = $wrapper->field_ilf_cycle_4->value();
-    }
-    $ilf_average = round((array_sum($ilf_values) / count($ilf_values)), 2);
-    if ($ilf_average > 0) {
-      $wrapper->field_ilf_average->set($ilf_average);
-    }
+    $ilf = ilf;
+    $ilfFieldNames = (esdportal_e3_entity_field_picker($ilf, $wrapper));
+    $ilf_average = esdportal_e3_entity_average($ilfFieldNames);
+    $wrapper->field_ilf_average->set($ilf_average);
+
     // Concept Development average.
-    $cd_values = array();
-    if (NULL !== $wrapper->field_cd_cycle_1->value()) {
-      $cd_values[] = $wrapper->field_cd_cycle_1->value();
-    }
-    if (NULL !== $wrapper->field_cd_cycle_2->value()) {
-      $cd_values[] = $wrapper->field_cd_cycle_2->value();
-    }
-    if (NULL !== $wrapper->field_cd_cycle_3->value()) {
-      $cd_values[] = $wrapper->field_cd_cycle_3->value();
-    }
-    if (NULL !== $wrapper->field_cd_cycle_4->value()) {
-      $cd_values[] = $wrapper->field_cd_cycle_4->value();
-    }
-    $cd_average = round((array_sum($cd_values) / count($cd_values)), 2);
-    if ($cd_average > 0) {
-      $wrapper->field_cd_average->set($cd_average);
-    }
+    $cd = cd;
+    $cdFieldNames = (esdportal_e3_entity_field_picker($cd, $wrapper));
+    $cd_average = esdportal_e3_entity_average($cdFieldNames);
+    $wrapper->field_cd_average->set($cd_average);
+
     // Quality of Feedback average.
-    $qf_values = array();
-    if (NULL !== $wrapper->field_qf_cycle_1->value()) {
-      $qf_values[] = $wrapper->field_qf_cycle_1->value();
-    }
-    if (NULL !== $wrapper->field_qf_cycle_2->value()) {
-      $qf_values[] = $wrapper->field_qf_cycle_2->value();
-    }
-    if (NULL !== $wrapper->field_qf_cycle_3->value()) {
-      $qf_values[] = $wrapper->field_qf_cycle_3->value();
-    }
-    if (NULL !== $wrapper->field_qf_cycle_4->value()) {
-      $qf_values[] = $wrapper->field_qf_cycle_4->value();
-    }
-    $qf_average = round((array_sum($qf_values) / count($qf_values)), 2);
-    if ($qf_average > 0) {
-      $wrapper->field_qf_average->set($qf_average);
-    }
+    $qf = qf;
+    $qfFieldNames = (esdportal_e3_entity_field_picker($qf, $wrapper));
+    $qf_average = esdportal_e3_entity_average($qfFieldNames);
+    $wrapper->field_qf_average->set($qf_average);
+
     // Language Modeling average.
-    $lm_values = array();
-    if (NULL !== $wrapper->field_lm_cycle_1->value()) {
-      $lm_values[] = $wrapper->field_lm_cycle_1->value();
-    }
-    if (NULL !== $wrapper->field_lm_cycle_2->value()) {
-      $lm_values[] = $wrapper->field_lm_cycle_2->value();
-    }
-    if (NULL !== $wrapper->field_lm_cycle_3->value()) {
-      $lm_values[] = $wrapper->field_lm_cycle_3->value();
-    }
-    if (NULL !== $wrapper->field_lm_cycle_4->value()) {
-      $lm_values[] = $wrapper->field_lm_cycle_4->value();
-    }
-    $lm_average = round((array_sum($lm_values) / count($lm_values)), 2);
-    if ($lm_average > 0) {
-      $wrapper->field_lm_average->set($lm_average);
-    }
+    $lm = lm;
+    $lmFieldNames = (esdportal_e3_entity_field_picker($lm, $wrapper));
+    $lm_average = esdportal_e3_entity_average($lmFieldNames);
+    $wrapper->field_lm_average->set($lm_average);
+
     // Emotional Support score.
     $es_score = round((($pc_average + (8 - $nc_average) + $ts_average + $rsp_average) / 4), 2);
     if ($es_score > 0) {
@@ -1148,23 +993,12 @@ function esdportal_e3_entity_presave($entity) {
     $wrapper = entity_metadata_wrapper('e3_note', $entity);
 
     // field_rc_average
-    $rc_values = array();
-    if (NULL !== $wrapper->field_rc_cycle_1->value()) {
-      $rc_values[] = $wrapper->field_rc_cycle_1->value();
-    }
-    if (NULL !== $wrapper->field_rc_cycle_2->value()) {
-      $rc_values[] = $wrapper->field_rc_cycle_2->value();
-    }
-    if (NULL !== $wrapper->field_rc_cycle_3->value()) {
-      $rc_values[] = $wrapper->field_rc_cycle_3->value();
-    }
-    if (NULL !== $wrapper->field_rc_cycle_4->value()) {
-      $rc_values[] = $wrapper->field_rc_cycle_4->value();
-    }
-    $rc_average = round((array_sum($rc_values) / count($rc_values)), 2);
-    if ($rc_average > 0) {
-      $wrapper->field_rc_average->set($rc_average);
-    }
+    $rc = rc;
+    $rcFieldNames = (esdportal_e3_entity_field_picker($rc, $wrapper));
+    $rc_average = esdportal_e3_entity_average($lmFieldNames);
+    $wrapper->field_rc_average->set($rc_average);
+
+
 
     // field_tsit_average
     $ts_values = array();
