@@ -873,7 +873,6 @@ function esdportal_e3_entity_average($fieldNames) {
     }
 
     $fields_average = round((array_sum($fields_values) / count($fields_values)) , 2);
-    
     if ($fields_average > 0) {
       return $fields_average;
     } else {
@@ -889,6 +888,18 @@ function esdportal_e3_entity_average($fieldNames) {
 function esdportal_e3_entity_presave($entity) {
   if ($entity->type == 'class_assessment') {
     $wrapper = entity_metadata_wrapper('e3_note', $entity);
+    //Positive Climate average
+    $pcFieldNames = array(
+      $wrapper->field_pc_cycle_1->value(),
+      $wrapper->field_pc_cycle_2->value(),
+      $wrapper->field_pc_cycle_3->value(),
+      $wrapper->field_pc_cycle_4->value(),
+    );
+    $wrapper->field_pc_average->set(esdportal_e3_entity_average($pcFieldNames));
+
+
+
+/**
     // Positive Climate average.
     $pc_values = array();
     if (NULL !== $wrapper->field_pc_cycle_1->value()) {
@@ -907,6 +918,9 @@ function esdportal_e3_entity_presave($entity) {
     if ($pc_average > 0) {
       $wrapper->field_pc_average->set($pc_average);
     }
+**/
+
+
     // Negative Climate average.
     $nc_values = array();
     if (NULL !== $wrapper->field_nc_cycle_1->value()) {
