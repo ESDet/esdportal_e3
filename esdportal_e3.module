@@ -881,6 +881,34 @@ function esdportal_e3_entity_average($fieldNames) {
 }
 
 /**
+ * Picks field values from an entity wrapper object and groups them.
+ *
+ * @param fieldAcronym, the field acronym.
+ * @param the wrapper object.
+ * a return an array of grouped field values, i.e. 1 value for each cycle.
+
+
+ */
+
+
+
+function esdportal_e3_entity_field_picker($fieldAcronym, $wrapper) {
+
+  $wrapperQueryString = field_.$fieldAcronym._cycle_;
+  $wrapperQueryArray = array();
+  for ($i = 1; $i <= 4; $i++) {
+    array_push($wrapperQueryArray, $wrapperQueryString.$i); 
+  }
+  //return($wrapperQueryArray);
+  $wrapperQueryArrayValues = array();
+  foreach ($wrapperQueryArray as $fieldName) {
+    array_push($wrapperQueryArrayValues, $wrapper->$fieldName->value());
+    }
+  return($wrapperQueryArrayValues);
+}
+
+
+/**
  * Implements hook_entity_presave().
  *
  * Calculate average(mean, 2 d.p.) field values, and associated scores.
@@ -889,15 +917,22 @@ function esdportal_e3_entity_presave($entity) {
   if ($entity->type == 'class_assessment') {
     $wrapper = entity_metadata_wrapper('e3_note', $entity);
     //Positive Climate average
+    
+    /**
     $pcFieldNames = array(
       $wrapper->field_pc_cycle_1->value(),
       $wrapper->field_pc_cycle_2->value(),
       $wrapper->field_pc_cycle_3->value(),
       $wrapper->field_pc_cycle_4->value(),
     );
+    **/
+
+    $positiveClimate = pc;
+    $pcFieldNames = (esdportal_e3_entity_field_picker($positiveClimate, $wrapper));
     $wrapper->field_pc_average->set(esdportal_e3_entity_average($pcFieldNames));
+  
 
-
+   
 
 /**
     // Positive Climate average.
@@ -920,6 +955,9 @@ function esdportal_e3_entity_presave($entity) {
     }
 **/
 
+
+
+//  $ncFieldNames = 
 
     // Negative Climate average.
     $nc_values = array();
