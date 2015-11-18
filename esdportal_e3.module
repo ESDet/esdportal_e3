@@ -858,43 +858,52 @@ function esdportal_e3_form_alter(&$form, &$form_state, $form_id) {
 }
 
 /**
- * Computes averages for a list of fields
- * 
- * @param array $fieldNames
- * @return average $fields_average
+ * Computes averages for a list of fields.
+ *
+ * @param array $target_fields
+ *   An array of fields and their values.
+ *
+ * @return string
+ *   Returns the average value from the array of target field values.
  */
-function esdportal_e3_entity_average($fieldNames) {
-  $fields_values = array(); //create empty array to store values
-  foreach ($fieldNames as $value) {
+function esdportal_e3_entity_average($target_fields) {
+  $fields_values = array();
+  foreach ($target_fields as $value) {
     if (NULL !== $value) {
-      array_push($fields_values, $value); //fill with value of each non-null field
+      array_push($fields_values, $value);
     }
   }
-  $fields_average = round((array_sum($fields_values) / count($fields_values)) , 2);
+  $fields_average = round((array_sum($fields_values) / count($fields_values)), 2);
     if ($fields_average > 0) {
       return $fields_average;
-    } else {
-      return false;
+    }
+    else {
+      return FALSE;
     }
 }
 
 /**
  * Picks field values from an entity wrapper object and groups them.
  *
- * @param fieldAcronym, the field acronym.
- * @param the wrapper object.
- * @return an array of dield values, i.e. 1 value for each cycle, max 4 cycles.
+ * @param string $field_acronym
+ *   The field acronym.
+ * @param object $wrapper
+ *   The entity metadata wrapper.
+ *
+ * @return array
+ *   An array of fields and their values, i.e. 1 value for each cycle
+ *   that matches the field_acronym, max 4 cycles.
  */
-function esdportal_e3_entity_field_picker($fieldAcronym, $wrapper) {
-  $wrapperQueryArray = array();
+function esdportal_e3_entity_field_picker($field_acronym, $wrapper) {
+  $wrapper_query_array = array();
   for ($i = 1; $i <= 4; $i++) {
-    array_push($wrapperQueryArray, field_.$fieldAcronym._cycle_.$i); 
+    array_push($wrapper_query_array, field_ . $field_acronym . _cycle_ . $i);
   }
-  $wrapperQueryArrayValues = array();
-  foreach ($wrapperQueryArray as $fieldName) {
-    array_push($wrapperQueryArrayValues, $wrapper->$fieldName->value());
-    }
-  return($wrapperQueryArrayValues);
+  $wrapper_query_array_values = array();
+  foreach ($wrapper_query_array as $field_name) {
+    array_push($wrapper_query_array_values, $wrapper->$field_name->value());
+  }
+  return ($wrapper_query_array_values);
 }
 
 /**
@@ -906,64 +915,54 @@ function esdportal_e3_entity_presave($entity) {
   if ($entity->type == 'class_assessment') {
     $wrapper = entity_metadata_wrapper('e3_note', $entity);
 
-    //Positive Climate Average.
-    $pc = pc;
-    $pcFieldNames = (esdportal_e3_entity_field_picker($pc, $wrapper));
-    $pc_average = esdportal_e3_entity_average($pcFieldNames);
+    // Positive Climate Average.
+    $pc_field_array = (esdportal_e3_entity_field_picker(pc, $wrapper));
+    $pc_average = esdportal_e3_entity_average($pc_field_array);
     $wrapper->field_pc_average->set($pc_average);
 
     // Negative Climate average.
-    $nc = nc;
-    $ncFieldNames = (esdportal_e3_entity_field_picker($nc, $wrapper));
-    $nc_average = esdportal_e3_entity_average($ncFieldNames);
+    $nc_field_array = (esdportal_e3_entity_field_picker(nc, $wrapper));
+    $nc_average = esdportal_e3_entity_average($nc_field_array);
     $wrapper->field_nc_average->set($nc_average);
-    
+
     // Teacher Sensitivity average.
-    $ts = ts;
-    $tsFieldNames = (esdportal_e3_entity_field_picker($ts, $wrapper));
-    $ts_average = esdportal_e3_entity_average($tsFieldNames);
+    $ts_field_array = (esdportal_e3_entity_field_picker(ts, $wrapper));
+    $ts_average = esdportal_e3_entity_average($ts_field_array);
     $wrapper->field_ts_average->set($ts_average);
-    
+
     // Regard for Student Perspective average.
-    $rsp = rsp;
-    $rspFieldNames = (esdportal_e3_entity_field_picker($rsp, $wrapper));
-    $rsp_average = esdportal_e3_entity_average($rspFieldNames);
+    $rsp_field_array = (esdportal_e3_entity_field_picker(rsp, $wrapper));
+    $rsp_average = esdportal_e3_entity_average($rsp_field_array);
     $wrapper->field_rsp_average->set($rsp_average);
 
     // Behaviour Management average.
-    $bm = bm;
-    $bmFieldNames = (esdportal_e3_entity_field_picker($bm, $wrapper));
-    $bm_average = esdportal_e3_entity_average($bmFieldNames);
+    $bm_field_array = (esdportal_e3_entity_field_picker(bm, $wrapper));
+    $bm_average = esdportal_e3_entity_average($bm_field_array);
     $wrapper->field_bm_average->set($bm_average);
 
     // Productivity average.
-    $p = p;
-    $pFieldNames = (esdportal_e3_entity_field_picker($p, $wrapper));
-    $p_average = esdportal_e3_entity_average($pFieldNames);
+    $p_field_array = (esdportal_e3_entity_field_picker(p, $wrapper));
+    $p_average = esdportal_e3_entity_average($p_field_array);
     $wrapper->field_p_average->set($p_average);
 
     // Instructional Learning Formats average.
-    $ilf = ilf;
-    $ilfFieldNames = (esdportal_e3_entity_field_picker($ilf, $wrapper));
-    $ilf_average = esdportal_e3_entity_average($ilfFieldNames);
+    $ilf_field_array = (esdportal_e3_entity_field_picker(ilf, $wrapper));
+    $ilf_average = esdportal_e3_entity_average($ilf_field_array);
     $wrapper->field_ilf_average->set($ilf_average);
 
     // Concept Development average.
-    $cd = cd;
-    $cdFieldNames = (esdportal_e3_entity_field_picker($cd, $wrapper));
-    $cd_average = esdportal_e3_entity_average($cdFieldNames);
+    $cd_field_array = (esdportal_e3_entity_field_picker(cd, $wrapper));
+    $cd_average = esdportal_e3_entity_average($cd_field_array);
     $wrapper->field_cd_average->set($cd_average);
 
     // Quality of Feedback average.
-    $qf = qf;
-    $qfFieldNames = (esdportal_e3_entity_field_picker($qf, $wrapper));
-    $qf_average = esdportal_e3_entity_average($qfFieldNames);
+    $qf_field_array = (esdportal_e3_entity_field_picker(qf, $wrapper));
+    $qf_average = esdportal_e3_entity_average($qf_field_array);
     $wrapper->field_qf_average->set($qf_average);
 
     // Language Modeling average.
-    $lm = lm;
-    $lmFieldNames = (esdportal_e3_entity_field_picker($lm, $wrapper));
-    $lm_average = esdportal_e3_entity_average($lmFieldNames);
+    $lm_field_array = (esdportal_e3_entity_field_picker(lm, $wrapper));
+    $lm_average = esdportal_e3_entity_average($lm_field_array);
     $wrapper->field_lm_average->set($lm_average);
 
     // Emotional Support score.
@@ -985,37 +984,33 @@ function esdportal_e3_entity_presave($entity) {
     }
   }
 
-  // field_rc_average = The average of all COMPLETED rc_cycle fields
-  // field_tsit_average = The average of all COMPLETED ts_cycle fields
-  // field_fe_average = The average of all COMPLETED fe_cycle fields
-  // field_els_average = The average of all COMPLETED els_cycle fields
+  // field_rc_average = The average of all COMPLETED rc_cycle fields.
+  // field_tsit_average = The average of all COMPLETED ts_cycle fields.
+  // field_fe_average = The average of all COMPLETED fe_cycle fields.
+  // field_els_average = The average of all COMPLETED els_cycle fields.
   // These can be placed before their respective xx_notes fields.
-  // field_rspc_score = average of the four above averages
+  // field_rspc_score = average of the four above averages.
   if ($entity->type == 'class_assessment_it') {
     $wrapper = entity_metadata_wrapper('e3_note', $entity);
 
-    // field_rc_average
-    $rc = rc;
-    $rcFieldNames = (esdportal_e3_entity_field_picker($rc, $wrapper));
-    $rc_average = esdportal_e3_entity_average($rcFieldNames);
+    // field_rc_average.
+    $rc_field_array = (esdportal_e3_entity_field_picker(rc, $wrapper));
+    $rc_average = esdportal_e3_entity_average($rc_field_array);
     $wrapper->field_rc_average->set($rc_average);
 
-    // field_tsit_average
-    $tsit = ts;
-    $tsitFieldNames = (esdportal_e3_entity_field_picker($tsit, $wrapper));
-    $tsit_average = esdportal_e3_entity_average($tsitFieldNames);
+    // field_tsit_average.
+    $tsit_field_array = (esdportal_e3_entity_field_picker(ts, $wrapper));
+    $tsit_average = esdportal_e3_entity_average($tsit_field_array);
     $wrapper->field_tsit_average->set($tsit_average);
 
-    // field_fe_average
-    $fe = fe;
-    $feFieldNames = (esdportal_e3_entity_field_picker($fe, $wrapper));
-    $fe_average = esdportal_e3_entity_average($feFieldNames);
+    // field_fe_average.
+    $fe_field_array = (esdportal_e3_entity_field_picker(fe, $wrapper));
+    $fe_average = esdportal_e3_entity_average($fe_field_array);
     $wrapper->field_fe_average->set($fe_average);
 
-    // field_els_average
-    $els = els;
-    $elsFieldNames = (esdportal_e3_entity_field_picker($els, $wrapper));
-    $els_average = esdportal_e3_entity_average($elsFieldNames);
+    // field_els_average.
+    $els_field_array = (esdportal_e3_entity_field_picker(els, $wrapper));
+    $els_average = esdportal_e3_entity_average($els_field_array);
     $wrapper->field_els_average->set($els_average);
 
     // Responsive Caregiving Score.
